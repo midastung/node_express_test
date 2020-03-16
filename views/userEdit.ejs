@@ -1,30 +1,30 @@
 <form name="editform" action="userEdit" method="post" accept-charset="utf-8">
     <h1>記帳 - 編輯</h1>
-    <input type="hidden" name="id" value="<%=data[0].id  %>" />
+    <input type="hidden" name="id" value="<%=data[0].id_account_tx  %>" />
       <div>
           <label>日期</label>
-          <input type="date" name="time" value="<%=data[0].time %>" />
+          <input type="date" name="time" value="<%=data[0].account_time %>" />
       </div>
       <div>
           <label>性質</label>
-          <select name="class" value="<%=data[0].class %>" >
+          <select name="class" value="<%=data[0].account_class %>" >
             　<option value="收益">收益</option>
             　<option value="支出">支出</option>
           </select>
       </div>
       <div>
           <label>項目</label>
-          <select name="tradeclass" value="<%=data[0].tradeclass %>">
+          <select name="tradeclass" value="<%=data[0].account_tradeclass %>">
             　<option value="營業外收入">營業外收入</option>
           </select>
       </div>
       <div>
         <label>金額</label>
-        <input type="text" name="price" placeholder="金額" value="<%=data[0].price %>">
+        <input type="text" name="price" placeholder="金額" value="<%=data[0].account_price %>">
       </div>
       <div>
         <label>備註</label>
-        <input type="textarea" name="note" placeholder="備註" value="<%=data[0].note %>"/>
+        <input type="textarea" name="note" placeholder="備註" value="<%=data[0].account_note %>"/>
       </div>
       <div>
           <input type='submit' value='Submit'>

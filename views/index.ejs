@@ -6,7 +6,7 @@
     <link rel='stylesheet' href='stylesheets/style.css' />
   </head>
   <body>
-    <h1>Goods</h1>
+    <h1>記帳資料</h1>
     <input type="submit" id="myBtn" value='Add'>
     <table style="width:100%">
       <tr>
@@ -20,22 +20,22 @@
       <% for( var i=0 ; i < data.length ; i++){ %>
         <tr>
           <td>
-            <%= data[i].time %>
+            <%= data[i].account_time. %>
           </td>
           <td>
-            <%= data[i].class %>
+            <%= data[i].account_class %>
           </td>
           <td>
-            <%= data[i].tradeclass %>
+            <%= data[i].account_tradeclass %>
           </td>
           <td>
-            <%= data[i].price %>
+            <%= data[i].account_price %>
           </td>
           <td>
-            <%= data[i].note %>
+            <%= data[i].account_note %>
           </td>
           <td>
-            　　<input type="button" name="edit" value="Edit" onclick="Edit('<%= data[i].id  %>');" />
+            　　<input type="button" name="edit" value="Edit" onclick="Edit('<%= data[i].id_account  %>');" />
           </td>
         </tr>
         <% } %>

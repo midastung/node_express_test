@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
   var db = req.con;
   var data = "";
 
-  db.query('SELECT * FROM article', function(err, rows){
+  db.query('SELECT * FROM account_tx', function(err, rows){
     if(err){
       console.log(err);
     }
@@ -21,15 +21,15 @@ router.post('/userAdd', function(req, res, next) {
 
   var db = req.con;
   var sql = {
-      time: req.body.time,
-      class: req.body.class,
-      tradeclass: req.body.tradeclass,
-      price: req.body.price,
-      note: req.body.note
+    account_time: req.body.time,
+    account_class: req.body.class,
+    account_tradeclass: req.body.tradeclass,
+    account_price: req.body.price,
+    account_note: req.body.note
   };
 
   //console.log(sql);
-  var qur = db.query('INSERT INTO article SET ?', sql, function(err, rows) {
+  var qur = db.query('INSERT INTO account_tx SET ?', sql, function(err, rows) {
       if (err) {
           console.log(err);
       }
@@ -46,7 +46,7 @@ router.get('/userEdit', function(req, res, next) {
   var db = req.con;
   var data = "";
 
-  db.query('SELECT * FROM article WHERE id = ?', id, function(err, rows) {
+  db.query('SELECT * FROM account_tx WHERE id_account = ?', id, function(err, rows) {
       if (err) {
           console.log(err);
       }
@@ -63,14 +63,14 @@ router.post('/userEdit', function(req, res, next) {
   var id = req.body.id;
 
   var sql = {
-    time: req.body.time,
-    class: req.body.class,
-    tradeclass: req.body.tradeclass,
-    price: req.body.price,
-    note: req.body.note
+    account_time: req.body.time,
+    account_class: req.body.class,
+    account_tradeclass: req.body.tradeclass,
+    account_price: req.body.price,
+    account_note: req.body.note
   };
 
-  var qur = db.query('UPDATE article SET ? WHERE id = ?', [sql, id], function(err, rows) {
+  var qur = db.query('UPDATE account_tx SET ? WHERE id_account = ?', [sql, id], function(err, rows) {
       if (err) {
           console.log(err);
       }

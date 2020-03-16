@@ -12,10 +12,11 @@ const session = require('express-session');
 //DataBase
 var mysql = require('mysql');
 var con = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '123456',
-  database: 'article'
+  host: 'kilincat.servebeer.com',
+  port: '5271',
+  user: 'firekilin',
+  password: '5270', 
+  database: 'washing_machine',
 });
 
 con.getConnection(function(err) {
