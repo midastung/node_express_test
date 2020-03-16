@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' type="text/css" href='stylesheets/indexModule.css'/>
+    <link rel='stylesheet' href='stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>Goods</h1>
+    <input type="submit" id="myBtn" value='Add'>
+    <table style="width:100%">
+      <tr>
+        <th>日期</th>
+        <th>性質</th>
+        <th>項目</th>
+        <th>金額</th>
+        <th>備註</th>
+        <th>編輯</th>
+      </tr>
+      <% for( var i=0 ; i < data.length ; i++){ %>
+        <tr>
+          <td>
+            <%= data[i].time %>
+          </td>
+          <td>
+            <%= data[i].class %>
+          </td>
+          <td>
+            <%= data[i].tradeclass %>
+          </td>
+          <td>
+            <%= data[i].price %>
+          </td>
+          <td>
+            <%= data[i].note %>
+          </td>
+          <td>
+            　　<input type="button" name="edit" value="Edit" onclick="Edit('<%= data[i].id  %>');" />
+          </td>
+        </tr>
+        <% } %>
+    </table>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <form name="addform" action="/userAdd" method="post" accept-charset="utf-8" >
+      <h1>記帳 - 新增</h1>
+      <div>
+          <label>日期</label>
+          <input type="date" name="time"  />
+      </div>
+      <div>
+          <label>性質</label>
+          <select name="class">
+            　<option value="收益">收益</option>
+            　<option value="支出">支出</option>
+          </select>
+      </div>
+      <div>
+          <label>項目</label>
+          <select name="tradeclass">
+            　<option value="營業外收入">營業外收入</option>
+          </select>
+      </div>
+      <div>
+        <label>金額</label>
+        <input type="text" name="price" placeholder="金額">
+      </div>
+      <div>
+        <label>備註</label>
+        <input type="textarea" name="note" placeholder="備註" />
+      </div>
+      <div>
+          <input type='submit' value='Submit'>
+          <input type='reset' value='Reset'>
+          <input type='button' value='Back' onclick="javascript: location.href='/'">
+      </div>
+  </form>
+  </div>
+
+</div>
+<script src="javascripts/indexScript.js"></script>
+<script>
+  function Edit(id) {
+        window.location.href = "/userEdit?id=" + id;
+    }
+</script>
+</body>
+</html>
