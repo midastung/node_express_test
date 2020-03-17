@@ -42,3 +42,16 @@ color: #000;
 text-decoration: none;
 cursor: pointer;
 }
+.sort_close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  }
+  
+  .sort_close:hover,
+  .sort_close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  }
