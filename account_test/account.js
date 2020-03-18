@@ -32,9 +32,7 @@ var query = function(sql, values) {
 	});
     });
 };
-app.get('/userQuery', function(req, res){	
-    res.sendFile('/Users/kilin/Documents/GitHub/node_express_test/node_express_test/account_test/userQuery.html');
-});
+
 app.get('/account', function(req, res){	
     res.sendFile('/Users/kilin/Documents/GitHub/node_express_test/node_express_test/account_test/account.html');
 });

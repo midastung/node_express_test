@@ -34,13 +34,13 @@ $(function () {
 		datatype: 'json',
 		mtype: 'post',colNames:['店家','D日期', '類別', '科目','借方','貸方','備註'],
 		colModel: [
-			{ name: 'shop_id', label: '店家'},
-			{ name: 'account_time', label: '日期' },
-			{ name: 'account_class', label: '類別' },
-			{ name: 'account_tradeclass', label: '科目' },
-			{ name: 'account_price_debit', label: '借方', align: 'right'},
-			{ name: 'account_price_credit', label: '貸方', align: 'right'},
-			{ name: 'account_note', label: '備註', align: 'right' }
+			{ name: 'shop_id',with:40},
+			{ name: 'account_time' ,with:150},
+			{ name: 'account_class' ,with:80},
+			{ name: 'account_tradeclass',with:200 },
+			{ name: 'account_price_debit', align: 'right',with:40},
+			{ name: 'account_price_credit', align: 'right',search,with:40},
+			{ name: 'account_note',with:200}
 		],//欄位資訊
 		rownumbers: true,//是否显示行号。true：显示
 		rownumWidth: 30,// 行号所在列的宽度
