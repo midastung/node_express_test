@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <head>
+    <!--各個畫面共同引用的套件-->
+    <!--jQuery-->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <!--jQuery blockUI-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
+    <!--free-jqGrid-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/redmond/jquery-ui.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
+    <!--網頁編碼-->
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+    <!--不要發出找 icon 的 request-->
+    <link rel="icon" href="data:;base64,=">
+</head>
+    <title>會員查詢</title>
+</head>
+
+<body>
+    <div class="m-2">
+        <table id="grid"></table>
+    </div>
+</body>
+
+<script>
+$(function () {
+	//會員查詢表格
+	$('#grid').jqGrid({
+		url: '/queryUser',
+		datatype: 'json',
+		mtype: 'POST',
+		colModel: [
+			{ name: 'login', label: '帳號', key: true, width: '24%' },
+			{ name: 'name', label: '姓名', width: '22%' },
+			{ name: 'expense', label: '總消費', align: 'right', formatter: 'integer', width: '16%' },
+			{ name: 'balance', label: '餘額', align: 'right', formatter: 'integer', width: '16%' }
+		],//欄位資訊
+		rownumbers: true,//是否显示行号。true：显示
+		rownumWidth: 30,// 行号所在列的宽度
+		autowidth: true,	//自動調整寬度
+		pager: '#pager',	//是否開啟分頁
+		page: 1,			//現在在第幾頁
+		rowNum: 10,	//一頁顯示幾筆資料
+		viewrecords: true,	//是否要看到資料總數
+		sortname: 'login',//排序欄位
+		sortorder: 'desc'	//排序順序		
+	});
+});
+</script>
+</html>
