@@ -34,7 +34,8 @@ var query = function(sql, values) {
 };
 
 app.get('/account', function(req, res){	
-    res.sendFile('/Users/kilin/Documents/GitHub/node_express_test/node_express_test/account_test/account.html');
+//需要設定頁面位置
+	res.sendFile('/Users/kilin/Documents/GitHub/node_express_test/node_express_test/account_test/account.html');
 });
 app.post('/queryUser', async function (req, res) {
 	console.log('query');
