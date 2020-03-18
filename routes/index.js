@@ -34,7 +34,8 @@ router.get('/', function(req, res, next) {
 			sort_time: sort_time,
 			sort_class: sort_class,
 			sort_tradeclass: sort_tradeclass,
-			sort_price: sort_price
+      sort_price: sort_price,
+      changeyymmdd:changeyymmdd
 		});
 	});
 });
@@ -251,7 +252,6 @@ router.post('/sort', function(req, res, next) {
       }
     }
   }
-	console.log(db_select + "    yoyoyo");
   //設定篩選項目
   var sort_time = [];
 	var sort_class = [];
