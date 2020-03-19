@@ -33,11 +33,11 @@ var query = function(sql, values) {
     });
 };
 app.get('/style/account.css',function(req,res){
-	res.sendFile('/Users/kilin/Documents/GitHub/node_express_test/node_express_test/account_test/style/account.css');
+	res.sendFile(process.cwd()+'/account_test/style/account.css');
 });
 app.get('/account', function(req, res){	
-//需要設定頁面位置
-	res.sendFile('/Users/kilin/Documents/GitHub/node_express_test/node_express_test/account_test/account.html');
+
+	res.sendFile(process.cwd()+'/account_test/account.html');
 });
 app.post('/queryUser', async function (req, res) {
 
