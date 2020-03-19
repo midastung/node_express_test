@@ -25,13 +25,14 @@
     <div class="m-2">
         <table id="grid"></table>
 	</div>
-	<div id="sortＭodal" class="modal">
+	<!-- <div id="sortＭodal" class="modal">
         <div class="sort_modal-content">
 			<span class='sort_close'>&times;</span>
 			<table id="sort_table">
 			</table>
         </div>
-    </div>
+	</div> -->
+	<div id="pager"></div>
 
 </body>
 
@@ -49,21 +50,34 @@ $(function () {
 			{ name: 'account_tradeclass' ,sortable:false},
 			{ name: 'account_price_debit', align: 'right',sortable:false},
 			{ name: 'account_price_credit', align: 'right',sortable:false},
-			{ name: 'account_note',sortable:false}
+			{ name: 'account_note',sortable:false},
 		],//欄位資訊
 		rownumbers: true,//是否显示行号。true：显示
-		rowNum:10,
-   	rowList:[10,20,30],	//一頁顯示幾筆資料
+		rowNum: 10,         //jqGrid預設顯示筆數
+   		rowList:[10,20,30],	//一頁顯示幾筆資料
 		rownumWidth: 30,// 行号所在列的宽度
 		autowidth: true,	//自動調整寬度
 		pager: '#pager',	//是否開啟分頁
+		caption: 'Ranger清單',
+        sortorder: "asc",                //jqGrid預設排序方式asc升冪，desc降冪
+        caption: '記帳清單',           //jqGrid標題欄顯示的文字
+        loadonce: true,                 //是否只載入一次
 		page: 1,			//現在在第幾頁
-		
 		viewrecords: true,	//是否要看到資料總數
 		onSortCol: function(name,index){ alert("Column Name: "+name+" Column Index: "+index);},
 		ondblClickRow: function(id){ alert("You double click row with id: "+id);},
-
 	});
+	jQuery('#grid').jqGrid('navGrid','#pager',
+		{
+			"add":true,
+			"del":true,	
+			"refresh":true,
+			"view":true,
+			"excel":true,
+			"pdf":true,
+		},
+		{"drag":true,"resize":true,"closeOnEscape":true,"dataheight":150},
+		{"drag":true,"resize":true,"closeOnEscape":true,"dataheight":150});
 	account_grid.trigger("reloadGrid");
 });
 
@@ -79,17 +93,17 @@ var account_grid= $('#sort_table').jqGrid({
 		],//欄位資訊
 		rownumbers: true,//是否显示行号。true：显示
 		rowNum:10,
-   	rowList:[10,20,30],	//一頁顯示幾筆資料
+   		rowList:[10,20,30],	//一頁顯示幾筆資料
 		rownumWidth: 30,// 行号所在列的宽度
 		autowidth: true,	//自動調整寬度
 		pager: '#pager',	//是否開啟分頁
 		page: 1,			//現在在第幾頁
-		
 		viewrecords: true,	//是否要看到資料總數
 		onSortCol: function(name,index){ alert("Column Name: "+name+" Column Index: "+index);},
 		ondblClickRow: function(id){ alert("You double click row with id: "+id);},
 
-	});
+	},
+	);
 	account_grid.trigger("reloadGrid");
   
 var sort_modal= document.getElementById("sortＭodal");
