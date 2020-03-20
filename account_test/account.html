@@ -25,7 +25,7 @@
     <div class="m-2">
         <table id="grid"></table>
 	</div>
-	<!-- <div id="sortＭodal" class="modal">
+	 <div id="sortＭodal" class="modal">
         <div class="sort_modal-content">
 
 			<span class='sort_close'>&times;</span>
@@ -33,7 +33,7 @@
 			<table id="sort_table">
 			</table>
         </div>
-	</div> -->
+	</div> 
 	<div id="pager"></div>
 
 </body>
@@ -71,12 +71,14 @@ $(function () {
 		autowidth: true,	//自動調整寬度
 		pager: '#pager',	//是否開啟分頁
 		caption: 'Ranger清單',
-        sortorder: "asc",                //jqGrid預設排序方式asc升冪，desc降冪
+        sortorder: 'asc',                //jqGrid預設排序方式asc升冪，desc降冪
         caption: '記帳清單',           //jqGrid標題欄顯示的文字
-        loadonce: true,                 //是否只載入一次
+        loadonce: false,                 //是否只載入一次
 		page: 1,			//現在在第幾頁
 		viewrecords: true,	//是否要看到資料總數
-		
+		onSortCol: function(name,index){
+			$('#grid').jqGrid('setGridParam',{url:'/queryUser'}).trigger('reloadGrid');
+		},
 		ondblClickRow: function(id){ alert("You double click row with id: "+id);},
 	});
 
@@ -111,7 +113,7 @@ $(function () {
    		rowList:[10,20,30],	//一頁顯示幾筆資料
 		rownumWidth: 30,// 行号所在列的宽度
 		autowidth: true,	//自動調整寬度
-		pager: '#pager',	//是否開啟分頁
+		pager: false,	//是否開啟分頁
 		page: 1,			//現在在第幾頁
 		viewrecords: true,	//是否要看到資料總數
 		ondblClickRow: function(id){ alert("You double click row with id: "+id);},

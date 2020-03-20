@@ -77,9 +77,7 @@ app.post('/queryUser', async function (req, res) {
 							if(b.shop_id==null){
 								return -1;
 							}else{
-								return a.shop_id > b.shop_id
-								? 1
-								: -1;
+								return a.shop_id > b.shop_id? 1: -1;
 							}
 						}
 				  });
