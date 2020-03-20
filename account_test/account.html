@@ -27,7 +27,9 @@
 	</div>
 	<div id="sortＭodal" class="modal">
         <div class="sort_modal-content">
+
 			<span class='sort_close'>&times;</span>
+			<div id="sort_content"></div>
 			<table id="sort_table">
 			</table>
         </div>
@@ -38,19 +40,28 @@
 <script>
 $(function () {
 	//會員查詢表格
-	var account_grid= $('#grid').jqGrid({
+	$('#grid').jqGrid({
 		url: '/queryUser',
 		datatype: 'json',
-		mtype: 'post',colNames:["店家 <button onclick='sort_mess(`shop_id`)'>ˇ</button>","日期 <button>ˇ</button>", "類別 <button>ˇ</button>", "科目 <button>ˇ</button>","借方 <button>ˇ</button>","貸方 <button>ˇ</button>","備註"],
+		mtype: 'post',
+		colNames:[
+			"店家 <button onclick='sort_window(`shop_id`)'>ˇ</button>",
+			"日期",
+			 "類別 <button onclick='sort_window(`account_class`)'>ˇ</button>",
+			  "科目 <button onclick='sort_window(`account_tradeclass`)'>ˇ</button>",
+			  "借方",
+			  "貸方",
+			  "備註"],
 		colModel: [
 			{ name: 'shop_id',sortable:false},
 			{ name: 'account_time',sortable:false},
 			{ name: 'account_class' ,sortable:false},
 			{ name: 'account_tradeclass' ,sortable:false},
-			{ name: 'account_price_debit', align: 'right',sortable:false},
-			{ name: 'account_price_credit', align: 'right',sortable:false},
+			{ name: 'account_price_debit', align: 'right',sortable:true},
+			{ name: 'account_price_credit', align: 'right',sortable:true},
 			{ name: 'account_note',sortable:false}
 		],//欄位資訊
+		
 		rownumbers: true,//是否显示行号。true：显示
 		rowNum:10,
    	rowList:[10,20,30],	//一頁顯示幾筆資料
@@ -60,23 +71,21 @@ $(function () {
 		page: 1,			//現在在第幾頁
 		
 		viewrecords: true,	//是否要看到資料總數
-		onSortCol: function(name,index){ alert("Column Name: "+name+" Column Index: "+index);},
+		
 		ondblClickRow: function(id){ alert("You double click row with id: "+id);},
 
 	});
-	account_grid.trigger("reloadGrid");
-});
-
-function sort_mess(sort_id) {　
 
 
-var account_grid= $('#sort_table').jqGrid({
-		url: '/queryUser/sort?sort_id='+sort_id,
+	$('#sort_table').jqGrid({
+		url: '/queryUser/sort?sort_id=shop_id',
 		datatype: 'json',
-		mtype: 'post',colNames:["yoyo"],
+		mtype: 'post',
+		colNames:["篩選項目"],
 		colModel: [
 			{ name: 'sort_list',sortable:false}
 		],//欄位資訊
+		multiselect: true,
 		rownumbers: true,//是否显示行号。true：显示
 		rowNum:10,
    	rowList:[10,20,30],	//一頁顯示幾筆資料
@@ -86,12 +95,16 @@ var account_grid= $('#sort_table').jqGrid({
 		page: 1,			//現在在第幾頁
 		
 		viewrecords: true,	//是否要看到資料總數
-		onSortCol: function(name,index){ alert("Column Name: "+name+" Column Index: "+index);},
 		ondblClickRow: function(id){ alert("You double click row with id: "+id);},
 
 	});
-	account_grid.trigger("reloadGrid");
-  
+});
+
+function sort_window(sort_id) {　
+	$("#sort_content")[0].innerHTML="<button onclick='sort_sord(`asc`,`"+sort_id+"`)'>A-Z排序</button><button onclick='sort_sord(`desc`,`"+sort_id+"`)'>Z-A排序</button>";
+	jQuery("#sort_table").jqGrid('setGridParam',{url:'/queryUser/sort?sort_id='+sort_id}).trigger('reloadGrid');
+
+
 var sort_modal= document.getElementById("sortＭodal");
 sort_modal.style.display="block";
 // When the user clicks on <span> (x), close the modal
@@ -99,6 +112,12 @@ var sort_span = document.getElementsByClassName("sort_close")[0];
 sort_span.onclick = function() {
 sort_modal.style.display = "none";
 }
+}
+function sort_sord(sort_order,sort_id){
+	$('#grid').jqGrid('setGridParam',{sortname: sort_id,sortorder:sort_order,onSelectAll:function(aRowids, status) {
+    		//Use a ternary operator to choose zero if the header has just been unchecked, or the total items if it has just been checked.
+   		 alert("You double click row with id: ");
+		}}).trigger('reloadGrid');
 }
 </script>
 </html>
