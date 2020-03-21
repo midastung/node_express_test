@@ -12,8 +12,8 @@ const myPool = mysql.createPool({
   database: 'washing_machine',
 });
 const session = require('express-session');
-var select_account=" SELECT shop_id,account_time,account_class,account_tradeclass,account_price,account_note FROM washing_machine.account_tx ";
-var select_tx=" SELECT shop_id,account_time,account_class,account_tradeclass,account_price,account_note From ((SELECT shop_id,time as account_time,'收益' as account_class,'營業收入' as account_tradeclass,amount as account_price,memo as account_note FROM washing_machine.tx)as tx ) ";
+var select_account=" SELECT id_account,shop_id,account_time,account_class,account_tradeclass,account_price,account_note FROM washing_machine.account_tx ";
+var select_tx=" SELECT id_account,shop_id,account_time,account_class,account_tradeclass,account_price,account_note From ((SELECT id as id_account,shop_id,time as account_time,'收益' as account_class,'營業收入' as account_tradeclass,amount as account_price,memo as account_note FROM washing_machine.tx)as tx ) ";
 var select_time=" where account_time BETWEEN DATE_ADD(NOW(), INTERVAL -30 DAY) AND NOW()";
 var query = function(sql, values) {
     return new Promise((resolve, reject) => {
@@ -82,19 +82,23 @@ app.post('/queryUser', async function (req, res) {
 	}
 	//console.log('query');
 	//console.log(select_filter_shop_id);
-	//console.log(req.body.sord);
+	//console.log(select_account+select_time+select_filter_shop_id+select_filter_class+select_filter_tradeclass+" union all "+select_tx+select_time+select_filter_shop_id+select_filter_class+select_filter_tradeclass);
 	let data = await query(select_account+select_time+select_filter_shop_id+select_filter_class+select_filter_tradeclass+" union all "+select_tx+select_time+select_filter_shop_id+select_filter_class+select_filter_tradeclass);
+
 	let account_data=[];
 	for(var i=0;i<data.length;i++){
+		var id_account=data[i].id_account;
 		var shop_id=data[i].shop_id;
-		var account_time=data[i].account_time;
+		var account_time=changeyymmdd(data[i].account_time);
+
 		var account_class=data[i].account_class;
 		var account_tradeclass=data[i].account_tradeclass;
 		let account_price_debit=data[i].account_class=='收益'?data[i].account_price:null;
 		let account_price_credit=data[i].account_class=='支出'?data[i].account_price:null;
 		var account_note=data[i].account_note;
-		account_data.push({shop_id,account_time,account_class,account_tradeclass,account_price_debit,account_price_credit,account_note})
+		account_data.push({id_account,shop_id,account_time,account_class,account_tradeclass,account_price_debit,account_price_credit,account_note})
 	}
+
 	var result;
 	switch(req.body.sidx){
 		case 'shop_id':
@@ -322,9 +326,12 @@ app.listen(8081, function(){
 app.post('/addPost', async function(req, res){
 	let account_price = req.body.account_class=="支出"?req.body.account_price_credit:req.body.account_price_debit;
 	var id = req.body.id;
+	console.log(req.body.account_time);
+	console.log(req.body.account_time);
 	var sql = {
 		shop_id: req.body.shop_id,
 		account_time: req.body.account_time,
+	
 		account_class: req.body.account_class,
 		account_tradeclass: req.body.account_tradeclass,
 		account_note: req.body.account_note,
@@ -336,26 +343,37 @@ app.post('/addPost', async function(req, res){
 				if (err){
 					console.log(err);
 				}
-				res.redirect('/');
+			
 			});
 		break;
 
 		case 'edit':
-			await query('UPDATE account_tx SET ?',sql,function(err, rows){
+			await query("UPDATE account_tx SET ? where id_account='"+id+"'",sql,id,function(err, rows){
 				if (err){
 					console.log(err);
 				}
 				
-				res.redirect('/');
+			
 			});
 		break;
 
 		case 'del':
-			await query('DELETE FROM account_tx WHERE id=?',id,function(err, rows){
+			await query('DELETE FROM account_tx WHERE id_account=?',id,function(err, rows){
 				if (err){
 					console.log(err);
 				}
-				res.redirect('/');
+			
 			});
+
 	}
+	res.send("200");
 });
+function changeyymmdd(getdate) {
+	let nowDate = getdate;
+	let year = nowDate.getFullYear();
+	let month = nowDate.getMonth() + 1;
+	let day = nowDate.getDate();
+	if (month < 10) month = '0' + month;
+	if (day < 10) day = '0' + day;
+	return year + '-' + month + '-' +day;
+  }
