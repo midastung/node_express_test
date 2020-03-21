@@ -30,11 +30,16 @@
 		<table id="grid"></table>
 		<table id="jqGrid01"></table>
 	</div>
+<<<<<<< HEAD
 	<!-- <div id="sortＭodal" class="modal">
+=======
+	 <div id="sortModal" class="modal">
+>>>>>>> a22096f7c75a185cc3f612c689c097ee89f9988e
         <div class="sort_modal-content">
 			<span class='sort_close'>&times;</span>
 			<table id="sort_table">
 			</table>
+			<button id="sort_table_btn">確認</button>
         </div>
 	</div> -->
 	<div id="pager"></div>
@@ -51,6 +56,7 @@ $(function () {
         height:"auto",
 		mtype: 'post',colNames:["店家 <button onclick='sort_mess(`shop_id`)'>ˇ</button>","日期 <button>ˇ</button>", "類別 <button>ˇ</button>", "科目 <button>ˇ</button>","借方 <button>ˇ</button>","貸方 <button>ˇ</button>","備註"],
 		colModel: [
+<<<<<<< HEAD
 			{ name: 'shop_id',sortable:false, width: 80,editable:true},
 			{ name: 'account_time',sortable:false,editable: true, width: 100,edittype:"text",editoptions: { dataInit: function(el) { setTimeout(function() { $(el).datepicker({ dateFormat: 'yy-mm-dd'}); }, 200); } }
 			}, 
@@ -60,6 +66,16 @@ $(function () {
 			{ name: 'account_price_credit', align: 'right',sortable:false,editable:true,edittype:"text"},
 			{ name: 'account_note',sortable:false,editable:true,edittype:"textarea"},
 			
+=======
+			{ name: 'shop_id' ,sortable:false},
+			{ name: 'account_time',sortable:false},
+			{ name: 'account_class' ,sortable:false},
+			{ name: 'account_tradeclass' ,sortable:false},
+			{ name: 'account_price_debit', align: 'right',sortable:true},
+			{ name: 'account_price_credit', align: 'right',sortable:true},
+			{ name: 'account_note',sortable:false}
+
+>>>>>>> a22096f7c75a185cc3f612c689c097ee89f9988e
 		],//欄位資訊
 			
 		rownumbers: true,//是否显示行号。true：显示
@@ -74,11 +90,25 @@ $(function () {
         loadonce: true,                 //是否只載入一次
 		page: 1,			//現在在第幾頁
 		viewrecords: true,	//是否要看到資料總數
+<<<<<<< HEAD
 		onSortCol: function(name,index){ alert("Column Name: "+name+" Column Index: "+index);},
+=======
+		
+		onSortCol: function(name,index){
+			$('#grid').jqGrid('setGridParam',{url:'/queryUser'}).trigger('reloadGrid');
+		},
+>>>>>>> a22096f7c75a185cc3f612c689c097ee89f9988e
 		ondblClickRow: function(id){ alert("You double click row with id: "+id);},
+		
 	});
 	
+<<<<<<< HEAD
 	jQuery('#grid').navGrid('#pager',
+=======
+
+  
+	$('#grid').jqGrid('navGrid','#pager',
+>>>>>>> a22096f7c75a185cc3f612c689c097ee89f9988e
 		{
 			edit:true, edittitle: "Edit Post", width: 500,
 			add:true, addtitle: "Add Post", width: 500,
@@ -104,7 +134,7 @@ var account_grid= $('#sort_table').jqGrid({
 		datatype: 'json',
 		mtype: 'post',colNames:["yoyo"],
 		colModel: [
-			{ name: 'sort_list',sortable:false}
+			{ name: 'sort_list' ,key:true,sortable:false}
 		],//欄位資訊
 		rownumbers: true,//是否显示行号。true：显示
 		rowNum:10,
@@ -116,6 +146,7 @@ var account_grid= $('#sort_table').jqGrid({
 		viewrecords: true,	//是否要看到資料總數
 		onSortCol: function(name,index){ alert("Column Name: "+name+" Column Index: "+index);},
 		ondblClickRow: function(id){ alert("You double click row with id: "+id);},
+<<<<<<< HEAD
 
 	});
 	account_grid.trigger("reloadGrid");
@@ -128,5 +159,49 @@ sort_span.onclick = function() {
 sort_modal.style.display = "none";
 }
 }
+=======
+});
+
+function sort_window(sort_id) {　
+	$("#sort_content")[0].innerHTML="<button onclick='sort_sord(`asc`,`"+sort_id+"`)'>A-Z排序</button><button onclick='sort_sord(`desc`,`"+sort_id+"`)'>Z-A排序</button>";
+	$("#sort_table").jqGrid('setGridParam',{url:'/queryUser/sort?sort_id='+sort_id}).trigger('reloadGrid');
+
+$("#sortModal")[0].style.display="block";
+$(".sort_close")[0].onclick = function() {
+	$("#sortModal")[0].style.display = "none";
+}
+var filter=[];
+$("#sort_table_btn")[0].onclick=function(){
+	$("#sortModal")[0].style.display = "none";
+	
+	 //alert( $("#sort_table").jqGrid('getGridParam','selarrrow'));
+	 filter.length=0;
+	 filter=$("#sort_table").jqGrid('getGridParam','selarrrow');
+	
+	 $('#grid').jqGrid('setGridParam',{url:'/queryUser',delData:filter,postData:{filter,sort_id}}).trigger('reloadGrid');
+	 $('#grid').jqGrid('clearGridData');  //清空表格  数据
+			 	      /*
+			 	    * 先清空条件
+			 	    * jqgrid postData setGridParam 调用多次时查询条件会累加
+			 	    */
+		    var postData = $('#grid').jqGrid("getGridParam", "postData");
+                    $.each(postData, function (k, v) {
+                        delete postData[k];
+                    });                    
+					jqGridOptions.postData["sort"]=sort;
+		$('#grid').setGridParam({postData:jqGridOptions.postData}).trigger("reloadGrid");
+	
+			 	  
+
+}
+}
+function sort_sord(sort_order,sort_id){
+	$('#grid').jqGrid('setGridParam',{sortname: sort_id,sortorder:sort_order,onSelectAll:function(aRowids, status) {
+    		//Use a ternary operator to choose zero if the header has just been unchecked, or the total items if it has just been checked.
+   		 alert("You double click row with id: ");
+		}}).trigger('reloadGrid');
+}
+	
+>>>>>>> a22096f7c75a185cc3f612c689c097ee89f9988e
 </script>
 </html>

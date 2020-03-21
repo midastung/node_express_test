@@ -2,6 +2,7 @@ const timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
 const mysql = require('mysql');
 const express = require('express');
 const app = express();
+//資料庫設定
 const myPool = mysql.createPool({
     connectionLimit: 100,
     host: 'kilincat.servebeer.com',
@@ -12,9 +13,8 @@ const myPool = mysql.createPool({
 });
 const session = require('express-session');
 var select_account=" SELECT shop_id,account_time,account_class,account_tradeclass,account_price,account_note FROM washing_machine.account_tx ";
-var select_tx=" SELECT shop_id,time as account_time,'收益' as account_class,'營業收入' as account_tradeclass,amount as account_price,memo as account_note FROM washing_machine.tx ";
-var select_account_time=" where account_time BETWEEN DATE_ADD(NOW(), INTERVAL -15 DAY) AND NOW()";
-var select_tx_time=" where time BETWEEN DATE_ADD(NOW(), INTERVAL -15 DAY) AND NOW()";
+var select_tx=" SELECT shop_id,account_time,account_class,account_tradeclass,account_price,account_note From ((SELECT shop_id,time as account_time,'收益' as account_class,'營業收入' as account_tradeclass,amount as account_price,memo as account_note FROM washing_machine.tx)as tx ) ";
+var select_time=" where account_time BETWEEN DATE_ADD(NOW(), INTERVAL -30 DAY) AND NOW()";
 var query = function(sql, values) {
     return new Promise((resolve, reject) => {
         myPool.getConnection(function (err, connection) {
@@ -46,11 +46,44 @@ app.get('/account', function(req, res){
 
 	res.sendFile(process.cwd()+'/account_test/account.html');
 });
+
+var select_filter_shop_id="";
+var select_filter_class="";
+var select_filter_tradeclass="";
 app.post('/queryUser', async function (req, res) {
+	var get_filter=req.body.filter;
+	var filter_key=req.body.sort_id;
+	switch(filter_key){
+		case 'shop_id':
+			select_filter_shop_id=" and shop_id in(";
+			for(var i=0;i<get_filter.length;i++){
+				
+				select_filter_shop_id+=i==0?"'"+get_filter[i]+"'":",'"+get_filter[i]+"'";
+			}
+			select_filter_shop_id+=") ";
+
+			break;
+		case 'account_class':
+			select_filter_class=" and account_class in(";
+			for(var i=0;i<get_filter.length;i++){
+				
+				select_filter_class+=i==0?"'"+get_filter[i]+"'":",'"+get_filter[i]+"'";
+			}
+			select_filter_class+=") ";
+			break;
+		case 'account_tradeclasee':
+			select_filter_tradeclass=" and account_tradeclass in(";
+			for(var i=0;i<get_filter.length;i++){
+				
+				select_filter_tradeclass+=i==0?"'"+get_filter[i]+"'":",'"+get_filter[i]+"'";
+			}
+			select_filter_tradeclass+=") ";
+			break;		
+	}
 	//console.log('query');
-	console.log();
-	console.log(req.body.sord);
-	let data = await query(select_account+select_account_time+" union all "+select_tx+select_tx_time);
+	//console.log(select_filter_shop_id);
+	//console.log(req.body.sord);
+	let data = await query(select_account+select_time+select_filter_shop_id+select_filter_class+select_filter_tradeclass+" union all "+select_tx+select_time+select_filter_shop_id+select_filter_class+select_filter_tradeclass);
 	let account_data=[];
 	for(var i=0;i<data.length;i++){
 		var shop_id=data[i].shop_id;
@@ -229,8 +262,8 @@ app.post('/queryUser', async function (req, res) {
 app.post('/queryUser/sort', async function (req, res) {
 	
 	 
-	console.log(req.query.sort_id);
-	let data = await query(`SELECT `+req.query.sort_id+` FROM washing_machine.account_tx `+select_account_time+` union all SELECT  tx_db.`+req.query.sort_id+` FROM (`+select_tx+select_tx_time+`)as tx_db`);
+	//console.log(req.query.sort_id);
+	let data = await query(`SELECT `+req.query.sort_id+` FROM washing_machine.account_tx `+select_time+` union all SELECT  tx_db.`+req.query.sort_id+` FROM (`+select_tx+select_time+`)as tx_db`);
 	let sort_data=[];
 	let notrepeat=[];
 	switch(req.query.sort_id){
