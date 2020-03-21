@@ -81,7 +81,7 @@ $(function () {
         loadonce: false,                 //是否只載入一次
 		page: 1,			//現在在第幾頁
 		viewrecords: true,	//是否要看到資料總數
-		editurl:"someurl.php",
+		editurl:"/addPost",
 		onSortCol: function(name,index){
 			$('#grid').jqGrid('setGridParam',{url:'/queryUser'}).trigger('reloadGrid');
 		},

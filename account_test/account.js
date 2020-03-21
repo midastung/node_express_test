@@ -319,3 +319,43 @@ app.listen(8081, function(){
 
 });
 
+app.post('/addPost', async function(req, res){
+	let account_price = req.body.account_class=="支出"?req.body.account_price_credit:req.body.account_price_debit;
+	var id = req.body.id;
+	var sql = {
+		shop_id: req.body.shop_id,
+		account_time: req.body.account_time,
+		account_class: req.body.account_class,
+		account_tradeclass: req.body.account_tradeclass,
+		account_note: req.body.account_note,
+		account_price
+	};
+	switch(req.body.oper){
+		case 'add':
+			await query('INSERT INTO account_tx SET ?',sql,function(err, rows){
+				if (err){
+					console.log(err);
+				}
+				res.redirect('/');
+			});
+		break;
+
+		case 'edit':
+			await query('UPDATE account_tx SET ?',sql,function(err, rows){
+				if (err){
+					console.log(err);
+				}
+				
+				res.redirect('/');
+			});
+		break;
+
+		case 'del':
+			await query('DELETE FROM account_tx WHERE id=?',id,function(err, rows){
+				if (err){
+					console.log(err);
+				}
+				res.redirect('/');
+			});
+	}
+});
