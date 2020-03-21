@@ -27,7 +27,7 @@
     <div class="m-2">
         <table id="grid"></table>
 	</div>
-	 <!-- <div id="sortModal" class="modal">
+	  <div id="sortModal" class="modal">
         <div class="sort_modal-content">
 
 			<span class='sort_close'>&times;</span>
@@ -36,7 +36,7 @@
 			</table>
 			<button id="sort_table_btn">確認</button>
         </div>
-	</div>  -->
+	</div> 
 	<div id="pager"></div>
 
 </body>
@@ -62,8 +62,8 @@ $(function () {
 			}, 
 			{ name: 'account_class' ,sortable:false,editable:true,width:80,edittype:'select', editoptions:{value:{收益:"收益",支出:"支出"}}},
 			{ name: 'account_tradeclass' ,sortable:false,editable:true, edittype:'select', editoptions:{value:{營業外收入:"營業外收入",營業收入:"營業收入"}}},
-			{ name: 'account_price_debit', align: 'right',sortable:false,editable:true,edittype:"text"},
-			{ name: 'account_price_credit', align: 'right',sortable:false,editable:true,edittype:"text"},
+			{ name: 'account_price_debit', align: 'right',sortable:true,editable:true,edittype:"text"},
+			{ name: 'account_price_credit', align: 'right',sortable:true,editable:true,edittype:"text"},
 			{ name: 'account_note',sortable:false,editable:true,edittype:"textarea"},
 
 
@@ -81,7 +81,7 @@ $(function () {
         loadonce: false,                 //是否只載入一次
 		page: 1,			//現在在第幾頁
 		viewrecords: true,	//是否要看到資料總數
-		
+		editurl:"someurl.php",
 		onSortCol: function(name,index){
 			$('#grid').jqGrid('setGridParam',{url:'/queryUser'}).trigger('reloadGrid');
 		},
