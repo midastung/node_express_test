@@ -12,8 +12,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/redmond/jquery-ui.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
 	<link rel='stylesheet' type="text/css" href='style/account.css' />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
-    <!--網頁編碼-->
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <!--不要發出找 icon 的 request-->
     <link rel="icon" href="data:;base64,=">
@@ -25,7 +27,7 @@
     <div class="m-2">
         <table id="grid"></table>
 	</div>
-	 <div id="sortModal" class="modal">
+	 <!-- <div id="sortModal" class="modal">
         <div class="sort_modal-content">
 
 			<span class='sort_close'>&times;</span>
@@ -34,7 +36,7 @@
 			</table>
 			<button id="sort_table_btn">確認</button>
         </div>
-	</div> 
+	</div>  -->
 	<div id="pager"></div>
 
 </body>
@@ -55,13 +57,15 @@ $(function () {
 			  "貸方",
 			  "備註"],
 		colModel: [
-			{ name: 'shop_id' ,sortable:false},
-			{ name: 'account_time',sortable:false},
-			{ name: 'account_class' ,sortable:false},
-			{ name: 'account_tradeclass' ,sortable:false},
-			{ name: 'account_price_debit', align: 'right',sortable:true},
-			{ name: 'account_price_credit', align: 'right',sortable:true},
-			{ name: 'account_note',sortable:false}
+		{ name: 'shop_id',sortable:false, width: 80,editable:true},
+			{ name: 'account_time',sortable:false,editable: true, width: 100,edittype:"text",editoptions: { dataInit: function(el) { setTimeout(function() { $(el).datepicker({ dateFormat: 'yy-mm-dd'}); }, 200); } }
+			}, 
+			{ name: 'account_class' ,sortable:false,editable:true,width:80,edittype:'select', editoptions:{value:{收益:"收益",支出:"支出"}}},
+			{ name: 'account_tradeclass' ,sortable:false,editable:true, edittype:'select', editoptions:{value:{營業外收入:"營業外收入",營業收入:"營業收入"}}},
+			{ name: 'account_price_debit', align: 'right',sortable:false,editable:true,edittype:"text"},
+			{ name: 'account_price_credit', align: 'right',sortable:false,editable:true,edittype:"text"},
+			{ name: 'account_note',sortable:false,editable:true,edittype:"textarea"},
+
 
 		],//欄位資訊
 		
@@ -88,16 +92,13 @@ $(function () {
 
   
 	$('#grid').jqGrid('navGrid','#pager',
-		{
-			"add":true,
-			"del":true,	
-			"refresh":true,
-			"view":true,
-			"excel":true,
-			"pdf":true,
-		},
-		{"drag":true,"resize":true,"closeOnEscape":true,"dataheight":150},
-		{"drag":true,"resize":true,"closeOnEscape":true,"dataheight":150});
+	{
+		edit:true, edittitle: "Edit Post", width: 500,
+		add:true, addtitle: "Add Post", width: 500,
+		del:true,
+	},
+	{closeAfterEdit: true,reloadAfterSubmit: true},
+	{closeAfterAdd: true,reloadAfterSubmit: true},{},)
 	
 });
 
