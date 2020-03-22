@@ -57,14 +57,14 @@ $(function () {
 			  "貸方",
 			  "備註"],
 		colModel: [
-		{ name: 'id_account',hidden:true,key:true,editable:false},
-		{ name: 'shop_id',sortable:false, width: 80,editable:true},
+			{ name: 'id_account',hidden:true,key:true,editable:false},
+			{ name: 'shop_id',sortable:false, width: 80,editable:true},
 			{ name: 'account_time',sortable:false,editable: true, width: 100,edittype:"text",editoptions: { dataInit: function(el) { setTimeout(function() { $(el).datepicker({ dateFormat: 'yy-mm-dd'}); }, 200); } }
-			}, 
+			,editrules:{date:true}}, 
 			{ name: 'account_class' ,sortable:false,editable:true,width:80,edittype:'select', editoptions:{value:{收益:"收益",支出:"支出"}}},
 			{ name: 'account_tradeclass' ,sortable:false,editable:true, edittype:'select', editoptions:{value:{營業外收入:"營業外收入",營業收入:"營業收入"}}},
-			{ name: 'account_price_debit', align: 'right',sortable:true,editable:true,edittype:"text"},
-			{ name: 'account_price_credit', align: 'right',sortable:true,editable:true,edittype:"text"},
+			{ name: 'account_price_debit', align: 'right',sortable:true,editable:true,edittype:"text",editrules:{integer:true}},
+			{ name: 'account_price_credit', align: 'right',sortable:true,editable:true,edittype:"text",editrules:{integer:true}},
 			{ name: 'account_note',sortable:false,editable:true,edittype:"textarea"},
 
 
@@ -164,6 +164,18 @@ function sort_sord(sort_order,sort_id){
    		 alert("You double click row with id: ");
 		}}).trigger('reloadGrid');
 }
-	
+// function errorValidate(value, column) {
+// 		var now = new Date, 
+// 			month = (now.getMonth() + 1) < 10 ? "0" + (now.getMonth() + 1) : now.getMonth() + 1,
+// 			day = now.getDate() < 10 ? "0" + now.getDate() : now.getDate(),
+// 			ymd = now.getFullYear() + "" + month + "" + day;
+// 			console.log(ymd,value)
+// 			if(value && value.indexOf(ymd) >= 0) {
+// 				return [true, 'value'];
+// 			} else {
+// 				return [false, '批号必须当前日期:年月日开头!'];
+// 			}
+// 	}   
+
 </script>
 </html>

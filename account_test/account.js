@@ -331,7 +331,6 @@ app.post('/addPost', async function(req, res){
 	var sql = {
 		shop_id: req.body.shop_id,
 		account_time: req.body.account_time,
-	
 		account_class: req.body.account_class,
 		account_tradeclass: req.body.account_tradeclass,
 		account_note: req.body.account_note,
