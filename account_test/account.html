@@ -2,28 +2,41 @@
 <html>
 
 <head>
-    <head>
     <!--各個畫面共同引用的套件-->
-    <!--jQuery-->
+	<!--jQuery-->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <!--jQuery blockUI-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
     <!--free-jqGrid-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/redmond/jquery-ui.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
-	<link rel='stylesheet' type="text/css" href='style/account.css' />
 
-
+	<!--kendo-->
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.common.min.css">
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.default.min.css">
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.3.1017/styles/kendo.blueopal.min.css">
+	<script src="https://kendo.cdn.telerik.com/2019.1.115/js/kendo.ui.core.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<!--
+	<script src="js/jquery.min.js"></script>
+	<script src="js/kendo.all.min.js"></script>
+	-->
+	<link rel='stylesheet' type="text/css" href='style/account.css' />
+
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <!--不要發出找 icon 的 request-->
     <link rel="icon" href="data:;base64,=">
-</head>
     <title>會員查詢</title>
 </head>
 
 <body>
+	<div id="cap-view" class="demo-section k-content">
+		<input id="color" value="1" style="width: 100%;" />
+
+
+		<button class="k-button k-primary" id="get" style="margin-top: 2em; float: right;">Customize</button>
+	</div>
     <div class="m-2">
         <table id="grid"></table>
 	</div>
@@ -42,6 +55,33 @@
 </body>
 
 <script>
+ $(document).ready(function() {
+                    var shop_data = [
+                        { text: "Black", value: "1" },
+                        { text: "Orange", value: "2" },
+                        { text: "Grey", value: "3" }
+                    ];
+
+                    // create DropDownList from input HTML element
+                    $("#color").kendoDropDownList({
+                        dataTextField: "text",
+                        dataValueField: "value",
+                        dataSource: shop_data,
+                        index: 0,
+                        change: shoponChange
+                    });
+                    var color = $("#color").data("kendoDropDownList");
+                    color.select(0);
+                    function shoponChange() {
+                        var value = $("#color").val();
+						//變換商店
+						console.log(value);
+                    };
+
+                   
+                });
+
+
 $(function () {
 	//會員查詢表格
 	$('#grid').jqGrid({
@@ -151,11 +191,6 @@ $("#sort_table_btn")[0].onclick=function(){
                     $.each(postData, function (k, v) {
                         delete postData[k];
                     });                    
-					jqGridOptions.postData["sort"]=sort;
-		$('#grid').setGridParam({postData:jqGridOptions.postData}).trigger("reloadGrid");
-	
-			 	  
-
 }
 }
 function sort_sord(sort_order,sort_id){

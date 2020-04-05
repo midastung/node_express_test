@@ -1,0 +1,14 @@
+業者tx 全列出，連結設備名稱及備註
+SELECT time,tx.shop_id,tx.emp_login,tx.equipment_id,equipment.name,tx.channel,tx.type,tx.amount,tx.memo  
+FROM washing_machine.tx
+LEFT JOIN washing_machine.equipment on tx.equipment_id=equipment.id or tx.emp_login=equipment.id
+
+
+
+業者tx,依照日期設備做群組,在連結設備名稱及備註,日期排序
+SELECT date_format(tx.time,'%Y-%m-%d'),tx.shop_id,tx.emp_login,tx.equipment_id,equipment.name,tx.channel,tx.type,sum(tx.amount),tx.memo  
+FROM washing_machine.tx 
+LEFT JOIN washing_machine.equipment 
+on tx.equipment_id=equipment.id or tx.emp_login=equipment.id 
+group by date_format(tx.time,'%Y-%m-%d'),tx.equipment_id 
+order by time desc

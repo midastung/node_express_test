@@ -1,7 +1,6 @@
 const timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
 const mysql = require('mysql');
-const express = require('express');
-const app = express();
+const app=require('../services/server')
 //資料庫設定
 const myPool = mysql.createPool({
     connectionLimit: 100,
@@ -317,10 +316,6 @@ app.post('/queryUser/sort', async function (req, res) {
 
 	//console.log(account_data);
 	res.send(sort_data);
-});
-app.listen(8081, function(){
-    console.log('Listen 8081...');
-
 });
 
 app.post('/addPost', async function(req, res){
