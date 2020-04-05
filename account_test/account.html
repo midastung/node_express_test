@@ -48,7 +48,7 @@ $(function () {
 		url: '/queryUser',
 		datatype: 'json',
 		mtype: 'post',
-		colNames:["編號",
+		colNames:["編號","類型",
 			"店家 <button onclick='sort_window(`shop_id`)'>ˇ</button>",
 			"日期",
 			 "類別 <button onclick='sort_window(`account_class`)'>ˇ</button>",
@@ -58,6 +58,7 @@ $(function () {
 			  "備註"],
 		colModel: [
 			{ name: 'id_account',hidden:true,key:true,editable:false},
+			{ name: 'type',hidden:true,key:true,editable:false},
 			{ name: 'shop_id',sortable:false, width: 80,editable:true},
 			{ name: 'account_time',sortable:false,editable: true, width: 100,edittype:"text",editoptions: { dataInit: function(el) { setTimeout(function() { $(el).datepicker({ dateFormat: 'yy-mm-dd'}); }, 200); } }
 			,editrules:{date:true}}, 

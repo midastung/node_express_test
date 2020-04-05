@@ -12,8 +12,8 @@ const myPool = mysql.createPool({
   database: 'washing_machine',
 });
 const session = require('express-session');
-var select_account=" SELECT id_account,shop_id,account_time,account_class,account_tradeclass,account_price,account_note FROM washing_machine.account_tx ";
-var select_tx=" SELECT id_account,shop_id,account_time,account_class,account_tradeclass,account_price,account_note From ((SELECT id as id_account,shop_id,time as account_time,'收益' as account_class,'營業收入' as account_tradeclass,amount as account_price,memo as account_note FROM washing_machine.tx)as tx ) ";
+var select_account=" SELECT id_account,shop_id,account_time,account_class,account_tradeclass,account_price,account_note,type FROM washing_machine.account_tx ";
+var select_tx=" SELECT id_account,shop_id,account_time,account_class,account_tradeclass,account_price,account_note,type From ((SELECT id as id_account,shop_id,time as account_time,'收益' as account_class,'營業收入' as account_tradeclass,amount as account_price,memo as account_note,type FROM washing_machine.tx)as tx ) ";
 var select_time=" where account_time BETWEEN DATE_ADD(NOW(), INTERVAL -30 DAY) AND NOW()";
 var query = function(sql, values) {
     return new Promise((resolve, reject) => {
@@ -88,6 +88,7 @@ app.post('/queryUser', async function (req, res) {
 	let account_data=[];
 	for(var i=0;i<data.length;i++){
 		var id_account=data[i].id_account;
+		var type=data[i].type;
 		var shop_id=data[i].shop_id;
 		var account_time=changeyymmdd(data[i].account_time);
 
@@ -96,7 +97,7 @@ app.post('/queryUser', async function (req, res) {
 		let account_price_debit=data[i].account_class=='收益'?data[i].account_price:null;
 		let account_price_credit=data[i].account_class=='支出'?data[i].account_price:null;
 		var account_note=data[i].account_note;
-		account_data.push({id_account,shop_id,account_time,account_class,account_tradeclass,account_price_debit,account_price_credit,account_note})
+		account_data.push({id_account,shop_id,account_time,account_class,account_tradeclass,account_price_debit,account_price_credit,account_note,type})
 	}
 
 	var result;
@@ -323,8 +324,10 @@ app.listen(8081, function(){
 
 });
 
+// 新增、編輯、刪除功能
 app.post('/addPost', async function(req, res){
 	let account_price = req.body.account_class=="支出"?req.body.account_price_credit:req.body.account_price_debit;
+	var type =  req.body.type;
 	var id = req.body.id;
 	console.log(req.body.account_time);
 	console.log(req.body.account_time);
@@ -336,8 +339,9 @@ app.post('/addPost', async function(req, res){
 		account_note: req.body.account_note,
 		account_price
 	};
+	// 判斷功能狀態
 	switch(req.body.oper){
-		case 'add':
+		case 'add':	
 			await query('INSERT INTO account_tx SET ?',sql,function(err, rows){
 				if (err){
 					console.log(err);
@@ -347,23 +351,47 @@ app.post('/addPost', async function(req, res){
 		break;
 
 		case 'edit':
-			await query("UPDATE account_tx SET ? where id_account='"+id+"'",sql,id,function(err, rows){
-				if (err){
-					console.log(err);
-				}
+			if(type=="PAY"){
 				
-			
-			});
+				await query("UPDATE tx SET ? where id_account='"+id+"'",sql,id,function(err, rows){
+					if (err){
+						console.log(err);
+					}
+					
+				
+				});
+			}
+			else{
+				await query("UPDATE account_tx SET ? where id_account='"+id+"'",sql,id,function(err, rows){
+					if (err){
+						console.log(err);
+					}
+					
+				
+				});
+			}
 		break;
 
 		case 'del':
-			await query('DELETE FROM account_tx WHERE id_account=?',id,function(err, rows){
-				if (err){
-					console.log(err);
-				}
+			if(type=="PAY"){
+				await query('DELETE FROM tx WHERE id_account=?',id,function(err, rows){
+					if (err){
+						console.log(err);
+					}
+				
+				});
+	
+			}
+			else{
+				await query('DELETE FROM account_tx WHERE id_account=?',id,function(err, rows){
+					if (err){
+						console.log(err);
+					}
+				
+				});
+	
+			}
 			
-			});
-
 	}
 	res.send("200");
 });
